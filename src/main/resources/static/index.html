@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>MC Server Control Panel</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
+        .box { border: 2px solid #ddd; padding: 20px; display: inline-block; border-radius: 10px; background: white; min-width: 300px; }
+        .ip-display { font-size: 1.5em; color: #2c3e50; font-weight: bold; margin-top: 15px; min-height: 1.6em;}
+        button { padding: 10px 20px; font-size: 1em; cursor: pointer; background-color: #3498db; color: white; border: none; border-radius: 5px; }
+        button:hover { background-color: #2980b9; }
+        .download-section { margin-top: 50px; border-top: 1px solid #ccc; padding-top: 20px; }
+        .btn-download { background-color: #27ae60; text-decoration: none; display: inline-block; margin-top: 10px; }
+        .btn-download:hover { background-color: #219150; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h1>STATUS</h1>
+        <button onclick="aggiornaStato()">View IP</button>
+        <div id="riquadro-ip" class="ip-display"> </div> <!-- instead of space, this was here: Press to see IP<br>(if available) -->
+    </div>
+
+    <div class="download-section">
+        <h3>Want to host?</h3>
+        <a href="https://github.com/TUO_UTENTE/TUO_REPO/releases" class="btn-download" style="padding: 10px 20px; color: white; border-radius: 5px;">
+            Download Desktop App (GitHub)
+        </a>
+    </div>
+
+    <script>
+        function aggiornaStato() {
+            const display = document.getElementById('riquadro-ip');
+            display.innerText = "Loading...";
+
+            // Chiamiamo il nostro server (l'endpoint che abbiamo creato prima)
+            fetch('/api/status')
+                .then(response => response.text())
+                .then(data => {
+                    if (data === "NONE") {
+                        display.innerText = "No Host";
+                        display.style.color = "#e74c3c"; // Rosso
+                    } else {
+                        display.innerText = "IP : " + data;
+                        display.style.color = "#27ae60"; // Verde
+                    }
+                })
+                .catch(error => {
+                    display.innerText = "Connection error";
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,15 +1,15 @@
-# 1. Usiamo un'immagine con Maven e Java 21 per compilare
-FROM maven:3.8.5-openjdk-21-slim AS build
+# 1. Fase di Build: Usiamo Maven con Java 21 (Temurin)
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 COPY . .
 RUN mvn clean package -DskipTests
 
-# 2. Usiamo un'immagine leggera solo con Java per farlo girare
-FROM openjdk:21-jdk-slim
-# Copiamo il file .jar generato dalla fase precedente
+# 2. Fase di Runtime: Usiamo un'immagine leggera con Java 21
+FROM eclipse-temurin:21-jdk-jammy
+# Copiamo il file .jar generato
 COPY --from=build /target/*.jar app.jar
 
-# Espone la porta 8080 (quella di Spring Boot)
+# Esponiamo la porta 8080
 EXPOSE 8080
 
-# Comando per avviare il server
+# Comando di avvio
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class StatusService {
     // Variabile in memoria: inizialmente nessuno hosta
-    private String currentIP = "192.168.1.1";
+    private String currentIP = "NONE";
 
     // Metodo per leggere lo stato
     public String getStatus() {
